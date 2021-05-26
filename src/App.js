@@ -1,26 +1,49 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import LoginPage from "./Pages/LoginPage";
+import ManifestsPage from "./Pages/ManifestsPage";
+import PendingsPage from "./Pages/PendingsPage";
+import ManageOrderPage from "./Pages/ManageOrderPage";
+import { UserContextProvider } from "./Context/UserContext";
+import { ManifestsContextProvider } from "./Context/ManifestsContext";
+import { PendingContextProvider } from "./Context/PendingContext";
+import Navigation from "./Navigation";
+import "./App.css";
 
-function App() {
+export default function App() {
+  // const srv = "/Delivery";
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <UserContextProvider>
+      <Router>
+        <Navigation />
+        <Switch>
+          <Route
+            exact
+            path="/" //{process.env.NODE_ENV === "development" ? "/" : srv}
+            component={LoginPage}
+          />
+          <ManifestsContextProvider>
+            <Route
+              exact
+              path="/manifests" //{process.env.NODE_ENV === "development" ? "/manifests" : "/manifests"}
+              component={ManifestsPage}
+            />
+            <PendingContextProvider>
+              <Route
+                exact
+                path="/pendings" //{process.env.NODE_ENV === "development" ? "/manifests" : "/manifests"}
+                component={PendingsPage}
+              />
+            </PendingContextProvider>
+            <Route
+              exact
+              path="/manageOrders" //{process.env.NODE_ENV === "development" ? "/manifests" : "/manifests"}
+              component={ManageOrderPage}
+            />
+          </ManifestsContextProvider>
+        </Switch>
+      </Router>
+    </UserContextProvider>
   );
 }
-
-export default App;
